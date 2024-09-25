@@ -143,6 +143,14 @@ public class BookService implements IBookService {
         return bookRepository.findBooksByName(bookName);
     }
 
+    @Override
+    public List<Book> findBooksByCategoryName(String categoryName) {
+        if (categoryName == null || categoryName.trim().isEmpty()) {
+            return List.of();
+        }
+        return bookRepository.findBooksByCategoryName(categoryName);
+    }
+
 
     private Book convertToEntity(BookDTO bookDTO) {
         return Book.builder()

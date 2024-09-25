@@ -19,10 +19,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Long countAllBook();
 
     // tìm sách theo tên
-    @Query("SELECT b FROM Book b WHERE b.name like LOWER(CONCAT('%',:bookName, '%'))")
-    List<Book> findBookByName(String bookName);
-
     @Query("SELECT b FROM Book b WHERE LOWER(b.name) LIKE LOWER(CONCAT('%', :bookName, '%'))")
     List<Book> findBooksByName(@Param("bookName") String bookName);
+
+    // tìm sách theo category
+    @Query("SELECT b FROM Book b JOIN b.category c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :categoryName, '%'))")
+    List<Book> findBooksByCategoryName(@Param("categoryName") String categoryName);
+
 
 }

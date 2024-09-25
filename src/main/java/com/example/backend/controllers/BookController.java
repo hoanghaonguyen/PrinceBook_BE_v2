@@ -290,4 +290,23 @@ public class BookController {
                 .build();
         return ResponseEntity.ok().body(apiResponse);
     }
+
+    @GetMapping("/searchBooks/category")
+    public ResponseEntity<ApiResponse> searchBooksByCategoryName(@RequestParam String categoryName){
+        List<Book> bookList = bookService.findBooksByCategoryName(categoryName);
+        if (bookList.isEmpty()) {
+            ApiResponse apiResponse = ApiResponse.builder()
+                    .message("Khong co quyen sach nao voi category: " + categoryName)
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .data(bookList)
+                .message("Da tim thay sach!")
+                .status(HttpStatus.OK.value())
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
 }

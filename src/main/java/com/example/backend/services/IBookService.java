@@ -26,5 +26,6 @@ public interface IBookService {
 
     Long countAllBook();
     List<Book> searchBooksByName(String bookName);
+    List<Book> findBooksByCategoryName(String categoryName);
 
 }
