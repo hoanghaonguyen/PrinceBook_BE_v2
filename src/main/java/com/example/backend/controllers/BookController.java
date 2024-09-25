@@ -252,4 +252,42 @@ public class BookController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
+
+    @GetMapping("/countBooks")
+    public ResponseEntity<ApiResponse> countBooks() {
+        Long countOfBooks = bookService.countAllBook();
+        // kiểm tra nếu không có quyển sách nào
+        if (countOfBooks == 0) {
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .data(countOfBooks)
+                    .message("Khong co quyen sach nao!")
+                    .status(HttpStatus.OK.value())
+                    .build());
+        }
+        ApiResponse apiResponse = ApiResponse.builder()
+                .data(countOfBooks)
+                .message("Count of book retrieved successfully!")
+                .status(HttpStatus.OK.value())
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @GetMapping("/searchBooks")
+    public ResponseEntity<ApiResponse> searchBooksByName(@RequestParam String bookName){
+        List<Book> bookList = bookService.searchBooksByName(bookName);
+        if (bookList.isEmpty()) {
+            ApiResponse apiResponse = ApiResponse.builder()
+                    .message("Khong co quyen sach nao voi ten: " + bookName)
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .data(bookList)
+                .message("Da tim thay sach!")
+                .status(HttpStatus.OK.value())
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
 }

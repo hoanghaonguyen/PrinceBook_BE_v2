@@ -130,6 +130,20 @@ public class BookService implements IBookService {
         bookRepository.saveAll(books);
     }
 
+    @Override
+    public Long countAllBook() {
+        return bookRepository.countAllBook();
+    }
+
+    @Override
+    public List<Book> searchBooksByName(String bookName) {
+        if (bookName == null || bookName.trim().isEmpty()) {
+            return List.of();
+        }
+        return bookRepository.findBooksByName(bookName);
+    }
+
+
     private Book convertToEntity(BookDTO bookDTO) {
         return Book.builder()
                 .name(bookDTO.getName())
@@ -143,5 +157,6 @@ public class BookService implements IBookService {
                 .category(categoryRepository.findById(bookDTO.getCategoryId()).orElse(null))
                 .build();
     }
+
 
 }
