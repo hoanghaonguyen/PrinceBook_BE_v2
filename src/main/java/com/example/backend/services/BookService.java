@@ -130,6 +130,28 @@ public class BookService implements IBookService {
         bookRepository.saveAll(books);
     }
 
+    // cập nhật insertBooks
+    public void insertBooks1 (List<BookDTO> bookDTOs) {
+        List<Book> books = bookDTOs.stream()
+                .map(this::convertToEntity)
+                .collect(Collectors.toList());  //sau khi chuyển đối tượng thành Entity, lưu vào List<Book> thông qua collect(Collectors.toList())
+        bookRepository.saveAll(books);
+    }
+
+    private Book convertToEntity(BookDTO bookDTO) {
+        return Book.builder()
+                .name(bookDTO.getName())
+                .author(bookDTO.getAuthor())
+                .publisher(bookDTO.getPublisher())
+                .publishedDate(bookDTO.getPublishedDate())
+                .pages(bookDTO.getPages())
+                .language(bookDTO.getLanguage())
+                .price(bookDTO.getPrice())
+                .description(bookDTO.getDescription())
+                .category(categoryRepository.findById(bookDTO.getCategoryId()).orElse(null))
+                .build();
+    }
+
     @Override
     public Long countAllBook() {
         return bookRepository.countAllBook();
@@ -150,21 +172,5 @@ public class BookService implements IBookService {
         }
         return bookRepository.findBooksByCategoryName(categoryName);
     }
-
-
-    private Book convertToEntity(BookDTO bookDTO) {
-        return Book.builder()
-                .name(bookDTO.getName())
-                .author(bookDTO.getAuthor())
-                .publisher(bookDTO.getPublisher())
-                .publishedDate(bookDTO.getPublishedDate())
-                .pages(bookDTO.getPages())
-                .language(bookDTO.getLanguage())
-                .price(bookDTO.getPrice())
-                .description(bookDTO.getDescription())
-                .category(categoryRepository.findById(bookDTO.getCategoryId()).orElse(null))
-                .build();
-    }
-
 
 }
